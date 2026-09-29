@@ -14,7 +14,13 @@ Platforma deweloperska: wspólny silnik Operaton (BPMN/DMN) + Postgres jako back
 
 ## Uruchomienie
 
-Każdy katalog ma własny `compose.yaml` (zarządzane przez Dockge). Lokalnie:
+Każdy katalog ma własny `compose.yaml` (zarządzane przez Dockge). `postgres`, `adminer` i `operaton` komunikują się ze sobą po nazwie usługi, więc **najpierw** trzeba utworzyć wspólną sieć:
+
+```bash
+docker network create dev-shared
+```
+
+Potem, dla każdego katalogu:
 
 ```bash
 cd <katalog>

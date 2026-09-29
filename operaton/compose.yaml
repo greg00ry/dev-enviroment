@@ -5,3 +5,9 @@ services:
     restart: unless-stopped
     ports:
       - "8180:8080"
+    networks:
+      - dev-shared
+
+networks:
+  dev-shared:
+    external: true
