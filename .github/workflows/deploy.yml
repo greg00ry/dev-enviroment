@@ -1,0 +1,36 @@
+name: Deploy to homelab
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, homelab, dev-environment]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync compose files into live dev-environment
+        run: |
+          set -e
+          LIVE=/home/grzegorz/dev-environment
+          for service in operaton postgres adminer codeserver drawio appsmith; do
+            if [ -d "$service" ]; then
+              mkdir -p "$LIVE/$service"
+              # kopiuj wszystko oprocz danych/workspace, ktorych nie ma w repo
+              find "$service" -mindepth 1 -maxdepth 1 -exec cp -r {} "$LIVE/$service/" \;
+            fi
+          done
+
+      - name: Rebuild and restart changed services
+        run: |
+          set -e
+          LIVE=/home/grzegorz/dev-environment
+          for service in operaton postgres adminer codeserver drawio appsmith; do
+            if [ -f "$LIVE/$service/compose.yaml" ]; then
+              echo "=== $service ==="
+              cd "$LIVE/$service"
+              docker compose up -d --build
+              cd -
+            fi
+          done
