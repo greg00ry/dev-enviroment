@@ -4,7 +4,7 @@ services:
     container_name: dev-operaton
     restart: unless-stopped
     ports:
-      - "8180:8080"
+      - "8180:8083"
     networks:
       - dev-shared
 
