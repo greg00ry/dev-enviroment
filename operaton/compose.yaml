@@ -1,0 +1,7 @@
+services:
+  operaton:
+    build: .
+    container_name: dev-operaton
+    restart: unless-stopped
+    ports:
+      - "8180:8080"
